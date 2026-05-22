@@ -1,0 +1,161 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [60, 180],
+      "size": [340, 314],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1], "slot_index": 0},
+        {"name": "MASK", "type": "MASK", "links": null, "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "LoadImage"},
+      "widgets_values": ["panel_001.png", "image"]
+    },
+    {
+      "id": 2,
+      "type": "OTBlueLineCleanup",
+      "pos": [470, 100],
+      "size": [360, 270],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 1}
+      ],
+      "outputs": [
+        {"name": "clean_line", "type": "IMAGE", "links": [2, 4], "slot_index": 0},
+        {"name": "line_overlay", "type": "IMAGE", "links": [5], "slot_index": 1},
+        {"name": "transparent_line_preview", "type": "IMAGE", "links": null, "slot_index": 2},
+        {"name": "settings_json", "type": "STRING", "links": null, "slot_index": 3}
+      ],
+      "properties": {"Node name for S&R": "OTBlueLineCleanup"},
+      "widgets_values": [90, 145, 28, 20, false, 8, 1]
+    },
+    {
+      "id": 3,
+      "type": "OTLineAutoClose",
+      "pos": [920, 100],
+      "size": [360, 220],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 2}
+      ],
+      "outputs": [
+        {"name": "closed_line", "type": "IMAGE", "links": [3], "slot_index": 0},
+        {"name": "closure_overlay", "type": "IMAGE", "links": [6], "slot_index": 1},
+        {"name": "segments_json", "type": "STRING", "links": null, "slot_index": 2}
+      ],
+      "properties": {"Node name for S&R": "OTLineAutoClose"},
+      "widgets_values": [180, 18, 75.0, 1, 600]
+    },
+    {
+      "id": 4,
+      "type": "OTRegionPaletteMap",
+      "pos": [1370, 100],
+      "size": [360, 190],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 3}
+      ],
+      "outputs": [
+        {"name": "region_preview", "type": "IMAGE", "links": [7], "slot_index": 0},
+        {"name": "regions_json", "type": "STRING", "links": null, "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "OTRegionPaletteMap"},
+      "widgets_values": [180, 32, 128, true]
+    },
+    {
+      "id": 5,
+      "type": "SaveImage",
+      "pos": [470, 450],
+      "size": [320, 270],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 4}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["opentoonz_line_tools/01_clean_line"]
+    },
+    {
+      "id": 6,
+      "type": "SaveImage",
+      "pos": [820, 450],
+      "size": [320, 270],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 5}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["opentoonz_line_tools/02_cleanup_overlay"]
+    },
+    {
+      "id": 7,
+      "type": "SaveImage",
+      "pos": [1170, 450],
+      "size": [320, 270],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 6}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["opentoonz_line_tools/03_closure_overlay"]
+    },
+    {
+      "id": 8,
+      "type": "SaveImage",
+      "pos": [1520, 450],
+      "size": [320, 270],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 7}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["opentoonz_line_tools/04_region_preview"]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "IMAGE"],
+    [2, 2, 0, 3, 0, "IMAGE"],
+    [3, 3, 0, 4, 0, "IMAGE"],
+    [4, 2, 0, 5, 0, "IMAGE"],
+    [5, 2, 1, 6, 0, "IMAGE"],
+    [6, 3, 1, 7, 0, "IMAGE"],
+    [7, 4, 0, 8, 0, "IMAGE"]
+  ],
+  "groups": [
+    {"title": "Input", "bounding": [30, 120, 390, 390], "color": "#3f789e", "font_size": 24, "locked": false},
+    {"title": "OpenToonz-Inspired Line Prep", "bounding": [440, 40, 1320, 340], "color": "#8f6f3d", "font_size": 24, "locked": false},
+    {"title": "Debug Outputs", "bounding": [440, 390, 1440, 360], "color": "#3f8f5f", "font_size": 24, "locked": false}
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [0, 0]
+    }
+  },
+  "version": 0.4
+}

@@ -114,6 +114,33 @@ ComfyUI를 재시작하면 다음 카테고리에 노드가 나타납니다.
 manga/opentoonz-line-tools
 ```
 
+## 예제 워크플로우
+
+ComfyUI 캔버스에서 그래프로 열 때는 UI workflow를 사용합니다.
+
+```text
+examples/opentoonz_line_tools_basic_ui.json
+```
+
+이 그래프는 다음 흐름입니다.
+
+```text
+LoadImage
+  -> OT Blue Line Cleanup
+  -> OT Line AutoClose
+  -> OT Region Palette Map
+  -> SaveImage debug outputs
+```
+
+실행하기 전 rough panel 이미지를 ComfyUI `input` 폴더에 넣고 `LoadImage`
+노드에서 선택하세요. placeholder 파일명은 `panel_001.png`입니다.
+
+API나 스크립트에서 `/prompt`로 실행할 때만 API prompt 버전을 사용합니다.
+
+```text
+examples/opentoonz_line_tools_basic_api.json
+```
+
 ## 검증
 
 ComfyUI Python 환경으로 smoke test를 실행합니다.

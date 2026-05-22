@@ -115,6 +115,33 @@ Restart ComfyUI. Nodes appear under:
 manga/opentoonz-line-tools
 ```
 
+## Example Workflows
+
+Use the UI workflow when opening a graph in the ComfyUI canvas:
+
+```text
+examples/opentoonz_line_tools_basic_ui.json
+```
+
+This graph is:
+
+```text
+LoadImage
+  -> OT Blue Line Cleanup
+  -> OT Line AutoClose
+  -> OT Region Palette Map
+  -> SaveImage debug outputs
+```
+
+Before queuing it, put a rough panel image into the ComfyUI `input` folder and
+select it in the `LoadImage` node. The placeholder filename is `panel_001.png`.
+
+Use the API prompt version only for `/prompt`-style scripted runs:
+
+```text
+examples/opentoonz_line_tools_basic_api.json
+```
+
 ## Verification
 
 Run the smoke tests with the ComfyUI Python environment:
