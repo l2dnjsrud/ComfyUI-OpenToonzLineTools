@@ -73,7 +73,24 @@ Outputs:
 
 ## Install
 
-Clone or copy this folder into ComfyUI custom nodes:
+Clone or copy this folder into ComfyUI custom nodes.
+
+On another ComfyUI installation:
+
+```bash
+cd /path/to/ComfyUI/custom_nodes
+git clone https://github.com/l2dnjsrud/ComfyUI-OpenToonzLineTools.git
+```
+
+Because this repository is currently private, authenticate first on machines
+that do not already have GitHub credentials:
+
+```bash
+gh auth login
+gh repo clone l2dnjsrud/ComfyUI-OpenToonzLineTools /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+```
+
+On this Mac, using the development copy by symlink is fine:
 
 ```bash
 cd /Users/iwongyeong/AI/ComfyUI/custom_nodes
@@ -83,11 +100,14 @@ ln -s /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools ComfyUI-OpenToonzLineTools
 Install dependencies in the ComfyUI environment if needed:
 
 ```bash
-cd /Users/iwongyeong/AI/ComfyUI
+cd /path/to/ComfyUI
 source .venv/bin/activate
-pip install -r /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools/requirements.txt
+pip install -r custom_nodes/ComfyUI-OpenToonzLineTools/requirements.txt
 deactivate
 ```
+
+Do not reinstall or upgrade `torch` from this node. Use the `torch` build that
+already belongs to that ComfyUI installation, especially on CUDA or MPS setups.
 
 Restart ComfyUI. Nodes appear under:
 
@@ -100,8 +120,8 @@ manga/opentoonz-line-tools
 Run the smoke tests with the ComfyUI Python environment:
 
 ```bash
-cd /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools
-/Users/iwongyeong/AI/ComfyUI/.venv/bin/python -m unittest discover -s tests -v
+cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+/path/to/ComfyUI/.venv/bin/python -m unittest discover -s tests -v
 ```
 
 ## Current Scope

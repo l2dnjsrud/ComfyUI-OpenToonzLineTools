@@ -73,6 +73,23 @@ OpenToonz식 indexed color editing으로 가기 위한 첫 단계입니다.
 
 이 폴더를 ComfyUI custom nodes에 연결합니다.
 
+다른 ComfyUI 설치본에서는 다음처럼 clone합니다.
+
+```bash
+cd /path/to/ComfyUI/custom_nodes
+git clone https://github.com/l2dnjsrud/ComfyUI-OpenToonzLineTools.git
+```
+
+현재 이 저장소는 private이므로, GitHub 인증이 없는 머신에서는 먼저
+인증한 뒤 clone합니다.
+
+```bash
+gh auth login
+gh repo clone l2dnjsrud/ComfyUI-OpenToonzLineTools /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+```
+
+이 Mac에서는 개발 중인 폴더를 symlink로 연결해도 됩니다.
+
 ```bash
 cd /Users/iwongyeong/AI/ComfyUI/custom_nodes
 ln -s /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools ComfyUI-OpenToonzLineTools
@@ -81,11 +98,15 @@ ln -s /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools ComfyUI-OpenToonzLineTools
 필요하면 ComfyUI 환경에 의존성을 설치합니다.
 
 ```bash
-cd /Users/iwongyeong/AI/ComfyUI
+cd /path/to/ComfyUI
 source .venv/bin/activate
-pip install -r /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools/requirements.txt
+pip install -r custom_nodes/ComfyUI-OpenToonzLineTools/requirements.txt
 deactivate
 ```
+
+이 node 때문에 `torch`를 새로 설치하거나 업그레이드하지 마세요. CUDA/MPS
+환경에서는 해당 ComfyUI 설치본이 이미 쓰고 있는 `torch` build를 그대로
+사용하는 것이 안전합니다.
 
 ComfyUI를 재시작하면 다음 카테고리에 노드가 나타납니다.
 
@@ -98,8 +119,8 @@ manga/opentoonz-line-tools
 ComfyUI Python 환경으로 smoke test를 실행합니다.
 
 ```bash
-cd /Users/iwongyeong/AI/ComfyUI-OpenToonzLineTools
-/Users/iwongyeong/AI/ComfyUI/.venv/bin/python -m unittest discover -s tests -v
+cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+/path/to/ComfyUI/.venv/bin/python -m unittest discover -s tests -v
 ```
 
 ## 현재 범위
