@@ -142,6 +142,26 @@ Use the API prompt version only for `/prompt`-style scripted runs:
 examples/opentoonz_line_tools_basic_api.json
 ```
 
+## Full-Page Inputs
+
+For high-resolution full manga/manhwa pages, use these nodes after panel
+detection and cropping whenever possible.
+
+`OT Blue Line Cleanup` can be useful on full pages as a quick line-extraction
+preview, but `OT Line AutoClose` and `OT Region Palette Map` are designed for
+panel crops or other bounded line-art regions. On full pages with many panels,
+speech balloons, perspective grids, and layout borders, endpoint counts can
+become too high and region maps can hit the `max_regions` cap.
+
+Use the local evaluator to check a YOLO-style research set:
+
+```bash
+cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+/path/to/ComfyUI/.venv/bin/python scripts/evaluate_research_images.py \
+  --dataset-root /path/to/dataset \
+  --output-dir outputs/research_eval
+```
+
 ## Verification
 
 Run the smoke tests with the ComfyUI Python environment:

@@ -5,9 +5,11 @@ from pathlib import Path
 import unittest
 
 import numpy as np
+import torch
 
 from opentoonz_line_tools.autoclose import AutoCloseSettings, autoclose_gaps
 from opentoonz_line_tools.cleanup import BlueCleanupSettings, cleanup_blue_lines
+from opentoonz_line_tools.nodes import OTBlueLineCleanup, OTLineAutoClose, OTRegionPaletteMap
 from opentoonz_line_tools.regions import RegionSettings, label_fill_regions
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -77,6 +79,51 @@ class ExampleWorkflowTests(unittest.TestCase):
         self.assertIn("OTLineAutoClose", class_types)
         self.assertIn("OTRegionPaletteMap", class_types)
         self.assertIn("SaveImage", class_types)
+
+
+class ComfyNodeBatchTests(unittest.TestCase):
+    def test_cleanup_node_preserves_image_batch_size(self) -> None:
+        images = np.ones((2, 48, 64, 3), dtype=np.float32)
+        images[0, 20:23, 8:56] = np.array([40, 100, 230], dtype=np.float32) / 255.0
+        images[1, 25:28, 6:58] = np.array([40, 100, 230], dtype=np.float32) / 255.0
+
+        clean, overlay, preview, settings_json = OTBlueLineCleanup().cleanup(
+            torch.from_numpy(images),
+            90,
+            145,
+            28,
+            20,
+            False,
+            8,
+            1,
+        )
+
+        payload = json.loads(settings_json)
+        self.assertEqual(clean.shape[0], 2)
+        self.assertEqual(overlay.shape[0], 2)
+        self.assertEqual(preview.shape[0], 2)
+        self.assertEqual(payload["batch_size"], 2)
+        self.assertGreater(payload["images"][0]["line_pixels"], 0)
+        self.assertGreater(payload["images"][1]["line_pixels"], 0)
+
+    def test_autoclose_and_region_nodes_preserve_image_batch_size(self) -> None:
+        images = np.ones((2, 60, 80, 3), dtype=np.float32)
+        for index in range(2):
+            images[index, 20, 8:30] = 0.0
+            images[index, 20, 38:62] = 0.0
+            images[index, 34, 10:60] = 0.0
+            images[index, 45, 10:60] = 0.0
+            images[index, 34:46, 10] = 0.0
+            images[index, 34:46, 60] = 0.0
+
+        closed, overlay, segments_json = OTLineAutoClose().autoclose(torch.from_numpy(images), 180, 12, 90.0, 1, 600)
+        regions, regions_json = OTRegionPaletteMap().regions(closed, 180, 20, 128, True)
+
+        self.assertEqual(closed.shape[0], 2)
+        self.assertEqual(overlay.shape[0], 2)
+        self.assertEqual(json.loads(segments_json)["batch_size"], 2)
+        self.assertEqual(regions.shape[0], 2)
+        self.assertEqual(json.loads(regions_json)["batch_size"], 2)
 
 
 if __name__ == "__main__":

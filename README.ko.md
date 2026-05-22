@@ -141,6 +141,27 @@ API나 스크립트에서 `/prompt`로 실행할 때만 API prompt 버전을 사
 examples/opentoonz_line_tools_basic_api.json
 ```
 
+## 전체 페이지 입력
+
+고해상도 만화/웹툰 전체 페이지에는 가능하면 패널 검출과 crop 이후에 이
+노드들을 사용하세요.
+
+`OT Blue Line Cleanup`은 전체 페이지에서도 line extraction preview 용도로
+쓸 수 있습니다. 하지만 `OT Line AutoClose`와 `OT Region Palette Map`은
+패널 crop이나 경계가 제한된 line-art 영역을 기준으로 설계되어 있습니다.
+전체 페이지에는 패널 여러 개, 말풍선, 원근선, 컷 경계가 함께 들어 있어
+endpoint 수가 너무 많아지거나 region map이 `max_regions` cap에 걸릴 수
+있습니다.
+
+YOLO 스타일 연구 데이터셋은 local evaluator로 점검할 수 있습니다.
+
+```bash
+cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
+/path/to/ComfyUI/.venv/bin/python scripts/evaluate_research_images.py \
+  --dataset-root /path/to/dataset \
+  --output-dir outputs/research_eval
+```
+
 ## 검증
 
 ComfyUI Python 환경으로 smoke test를 실행합니다.
