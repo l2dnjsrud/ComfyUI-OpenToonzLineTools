@@ -1,0 +1,36 @@
+{
+  "name": "opentoonz_line_tools_panel_preprocess",
+  "recommended_chain": [
+    {
+      "node": "OT Blue Line Cleanup",
+      "settings": {
+        "hue_low": 90,
+        "hue_high": 145,
+        "saturation_min": 28,
+        "value_min": 20,
+        "include_dark_lines": false,
+        "despeckle_px": 8,
+        "close_px": 1
+      }
+    },
+    {
+      "node": "OT Line AutoClose",
+      "settings": {
+        "threshold": 180,
+        "closing_distance": 18,
+        "spot_angle": 75,
+        "line_width": 1,
+        "max_endpoints": 600
+      }
+    },
+    {
+      "node": "OT Region Palette Map",
+      "settings": {
+        "threshold": 180,
+        "min_area": 32,
+        "max_regions": 128,
+        "ignore_border_regions": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-opentoonz-line-tools"
+version = "0.1.0"
+description = "OpenToonz-inspired cleanup, gap closing, and palette-region ComfyUI nodes for rough blue manga manuscripts."
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "opencv-python",
+  "Pillow",
+  "torch",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["opentoonz_line_tools*"]
