@@ -2,7 +2,7 @@
   "name": "opentoonz_line_tools_panel_preprocess",
   "recommended_chain": [
     {
-      "node": "OT Blue Line Cleanup",
+      "node": "Blue Sketch Cleaner",
       "settings": {
         "hue_low": 90,
         "hue_high": 145,
@@ -14,7 +14,7 @@
       }
     },
     {
-      "node": "OT Line AutoClose",
+      "node": "Line Gap Closer",
       "settings": {
         "threshold": 180,
         "closing_distance": 18,
@@ -24,7 +24,7 @@
       }
     },
     {
-      "node": "OT Region Palette Map",
+      "node": "Color Region Finder",
       "settings": {
         "threshold": 180,
         "min_area": 32,

@@ -13,9 +13,9 @@ flowchart TD
     B --> C[Polygon-masked panel crops]
     C --> D{Preprocess?}
     D -->|baseline| E[Raw crop to Qwen Image Edit]
-    D -->|OT-inspired| F[Blue Line Cleanup]
-    F --> G[Line AutoClose]
-    G --> H[Region Palette Map]
+    D -->|OT-inspired| F[Blue Sketch Cleaner]
+    F --> G[Line Gap Closer]
+    G --> H[Color Region Finder]
     H --> I[Qwen Image Edit or MangaNinja]
     E --> J[Colored panel]
     I --> J
@@ -26,9 +26,9 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A[Load Image / Panel Crop] --> B[OT Blue Line Cleanup]
-    B --> C[OT Line AutoClose]
-    C --> D[OT Region Palette Map]
+    A[Load Image / Panel Crop] --> B[Blue Sketch Cleaner]
+    B --> C[Line Gap Closer]
+    C --> D[Color Region Finder]
     D --> E[Colorization Node]
     E --> F[Reassemble]
 ```
@@ -37,13 +37,13 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    A[OT Blue Line Cleanup] --> A1[clean_line IMAGE]
+    A[Blue Sketch Cleaner] --> A1[clean_line IMAGE]
     A --> A2[line_overlay IMAGE]
     A --> A3[settings_json]
-    B[OT Line AutoClose] --> B1[closed_line IMAGE]
+    B[Line Gap Closer] --> B1[closed_line IMAGE]
     B --> B2[closure_overlay IMAGE]
     B --> B3[segments_json]
-    C[OT Region Palette Map] --> C1[region_preview IMAGE]
+    C[Color Region Finder] --> C1[region_preview IMAGE]
     C --> C2[regions_json]
 ```
 

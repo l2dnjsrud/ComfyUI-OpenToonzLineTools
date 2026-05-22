@@ -62,9 +62,9 @@ unittest smoke tests.
 
 **Dependencies:** Task 2
 
-- [x] Add `OT Blue Line Cleanup`.
-- [x] Add `OT Line AutoClose`.
-- [x] Add `OT Region Palette Map`.
+- [x] Add `Blue Sketch Cleaner` (`OTBlueLineCleanup` internally).
+- [x] Add `Line Gap Closer` (`OTLineAutoClose` internally).
+- [x] Add `Color Region Finder` (`OTRegionPaletteMap` internally).
 
 ### Task 4: Documentation
 
