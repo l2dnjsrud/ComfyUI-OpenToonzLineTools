@@ -168,6 +168,14 @@ cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
   --output-dir outputs/research_eval
 ```
 
+Panel crop folders can be checked directly as well:
+
+```bash
+/path/to/ComfyUI/.venv/bin/python scripts/evaluate_research_images.py \
+  --image-root /path/to/panels \
+  --output-dir outputs/panel_eval
+```
+
 ## Verification
 
 Run the smoke tests with the ComfyUI Python environment:

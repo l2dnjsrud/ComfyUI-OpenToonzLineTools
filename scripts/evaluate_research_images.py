@@ -22,9 +22,12 @@ IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Evaluate OpenToonz Line Tools on a YOLO-style image dataset.")
-    parser.add_argument("--dataset-root", required=True, type=Path, help="Dataset root containing images/train and images/val.")
+    parser = argparse.ArgumentParser(description="Evaluate OpenToonz Line Tools on research image sets.")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--dataset-root", type=Path, help="Dataset root containing images/train and images/val.")
+    source.add_argument("--image-root", type=Path, help="Directory containing images directly or recursively.")
     parser.add_argument("--output-dir", required=True, type=Path, help="Directory for metrics and contact sheet outputs.")
+    parser.add_argument("--image-glob", default="panel*.*", help="Glob used with --image-root. Default: panel*.*")
     parser.add_argument("--region-min-area", default=256, type=int)
     parser.add_argument("--max-regions", default=128, type=int)
     parser.add_argument("--max-endpoints", default=600, type=int)
@@ -32,11 +35,19 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def image_paths(dataset_root: Path) -> list[Path]:
+def dataset_image_paths(dataset_root: Path) -> list[Path]:
     image_root = dataset_root / "images"
     return [
         path
         for path in sorted(image_root.glob("*/*.*"))
+        if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES
+    ]
+
+
+def root_image_paths(image_root: Path, image_glob: str) -> list[Path]:
+    return [
+        path
+        for path in sorted(image_root.rglob(image_glob))
         if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES
     ]
 
@@ -94,7 +105,7 @@ def write_summary(summary: dict[str, Any], path: Path) -> None:
     rows = summary["rows"]
     max_regions = summary["settings"]["regions"]["max_regions"]
     lines = [
-        "# MC/MS Research Image Evaluation",
+        f"# {summary['title']}",
         "",
         f"Dataset: `{summary['dataset']}`",
         "",
@@ -124,7 +135,18 @@ def write_summary(summary: dict[str, Any], path: Path) -> None:
 def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    paths = image_paths(args.dataset_root)
+    if args.dataset_root:
+        source_root = args.dataset_root
+        paths = dataset_image_paths(source_root)
+        title = "MC/MS Research Image Evaluation"
+        source_kind = "dataset"
+    else:
+        source_root = args.image_root
+        paths = root_image_paths(source_root, args.image_glob)
+        title = "Panel Crop Image Evaluation"
+        source_kind = "image_root"
+    if not paths:
+        raise SystemExit(f"No images found under {source_root} with the selected input mode.")
     cleanup_settings = BlueCleanupSettings()
     autoclose_settings = AutoCloseSettings(max_endpoints=args.max_endpoints)
     region_settings = RegionSettings(
@@ -136,10 +158,10 @@ def main() -> None:
     rows: list[dict[str, Any]] = []
     contact_rows: list[Image.Image] = []
     for index, path in enumerate(paths, 1):
-        rel = path.relative_to(args.dataset_root)
+        rel = path.relative_to(source_root)
         source_pil = Image.open(path).convert("RGB")
         source = np.asarray(source_pil)
-        labels = label_count(args.dataset_root, path)
+        labels = label_count(source_root, path) if args.dataset_root else 0
 
         start = time.perf_counter()
         clean = cleanup_blue_lines(source, cleanup_settings)
@@ -156,7 +178,7 @@ def main() -> None:
         line_ratio = float(clean["line_mask"].mean())
         row = {
             "index": index,
-            "split": rel.parts[1],
+            "split": rel.parts[1] if args.dataset_root and len(rel.parts) > 1 else rel.parent.as_posix() or ".",
             "file": rel.name,
             "relative_path": str(rel),
             "width": int(source.shape[1]),
@@ -196,7 +218,10 @@ def main() -> None:
         )
 
     summary = {
-        "dataset": str(args.dataset_root),
+        "title": title,
+        "dataset": str(source_root),
+        "source_kind": source_kind,
+        "image_glob": args.image_glob if args.image_root else None,
         "image_count": len(rows),
         "settings": {
             "cleanup": cleanup_settings.__dict__,

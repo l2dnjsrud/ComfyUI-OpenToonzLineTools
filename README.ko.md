@@ -167,6 +167,14 @@ cd /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
   --output-dir outputs/research_eval
 ```
 
+패널 crop 폴더도 직접 점검할 수 있습니다.
+
+```bash
+/path/to/ComfyUI/.venv/bin/python scripts/evaluate_research_images.py \
+  --image-root /path/to/panels \
+  --output-dir outputs/panel_eval
+```
+
 ## 검증
 
 ComfyUI Python 환경으로 smoke test를 실행합니다.
