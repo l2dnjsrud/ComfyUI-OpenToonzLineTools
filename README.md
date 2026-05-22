@@ -15,9 +15,9 @@ The intended upstream/downstream flow is:
 
 ```text
 blue rough panel crop
-  -> OT Blue Line Cleanup
-  -> OT Line AutoClose
-  -> OT Region Palette Map
+  -> Blue Sketch Cleaner
+  -> Line Gap Closer
+  -> Color Region Finder
   -> Qwen Image Edit / MangaNinja / reference colorization
   -> panel reassemble
 ```
@@ -38,10 +38,17 @@ Relevant OpenToonz references:
 
 ## Nodes
 
-### OT Blue Line Cleanup
+See the full parameter guide:
+
+- [Node and Parameter Guide](docs/parameter_guide.md)
+- [Korean Parameter Guide](docs/parameter_guide.ko.md)
+
+### Blue Sketch Cleaner
 
 Classifies blue rough pencil strokes and emits a normalized black-on-white line
 image plus an overlay preview.
+
+Internal workflow id: `OTBlueLineCleanup`
 
 Outputs:
 
@@ -50,10 +57,12 @@ Outputs:
 - `transparent_line_preview`: line-only preview on white
 - `settings_json`: exact parameters used
 
-### OT Line AutoClose
+### Line Gap Closer
 
 Finds skeleton endpoints and draws short closure segments when endpoint distance
 and direction are compatible.
+
+Internal workflow id: `OTLineAutoClose`
 
 Outputs:
 
@@ -61,10 +70,12 @@ Outputs:
 - `closure_overlay`: original black lines plus red closure strokes
 - `segments_json`: closure segment coordinates
 
-### OT Region Palette Map
+### Color Region Finder
 
 Labels fillable regions separated by line art and returns a JSON list of region
 metadata. This is the first step toward OpenToonz-style indexed color editing.
+
+Internal workflow id: `OTRegionPaletteMap`
 
 Outputs:
 
@@ -82,13 +93,8 @@ cd /path/to/ComfyUI/custom_nodes
 git clone https://github.com/l2dnjsrud/ComfyUI-OpenToonzLineTools.git
 ```
 
-Because this repository is currently private, authenticate first on machines
-that do not already have GitHub credentials:
-
-```bash
-gh auth login
-gh repo clone l2dnjsrud/ComfyUI-OpenToonzLineTools /path/to/ComfyUI/custom_nodes/ComfyUI-OpenToonzLineTools
-```
+The repository is public, so another ComfyUI install can clone it without
+GitHub authentication.
 
 On this Mac, using the development copy by symlink is fine:
 
@@ -127,9 +133,9 @@ This graph is:
 
 ```text
 LoadImage
-  -> OT Blue Line Cleanup
-  -> OT Line AutoClose
-  -> OT Region Palette Map
+  -> Blue Sketch Cleaner
+  -> Line Gap Closer
+  -> Color Region Finder
   -> SaveImage debug outputs
 ```
 
@@ -147,8 +153,8 @@ examples/opentoonz_line_tools_basic_api.json
 For high-resolution full manga/manhwa pages, use these nodes after panel
 detection and cropping whenever possible.
 
-`OT Blue Line Cleanup` can be useful on full pages as a quick line-extraction
-preview, but `OT Line AutoClose` and `OT Region Palette Map` are designed for
+`Blue Sketch Cleaner` can be useful on full pages as a quick line-extraction
+preview, but `Line Gap Closer` and `Color Region Finder` are designed for
 panel crops or other bounded line-art regions. On full pages with many panels,
 speech balloons, perspective grids, and layout borders, endpoint counts can
 become too high and region maps can hit the `max_regions` cap.

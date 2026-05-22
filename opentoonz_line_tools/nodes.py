@@ -68,6 +68,7 @@ class OTBlueLineCleanup:
     RETURN_NAMES = ("clean_line", "line_overlay", "transparent_line_preview", "settings_json")
     FUNCTION = "cleanup"
     CATEGORY = "manga/opentoonz-line-tools"
+    DESCRIPTION = "Extract blue rough sketch strokes and convert them into clean black line art for later inking, gap closing, or colorization."
 
     def cleanup(
         self,
@@ -127,6 +128,7 @@ class OTLineAutoClose:
     RETURN_NAMES = ("closed_line", "closure_overlay", "segments_json")
     FUNCTION = "autoclose"
     CATEGORY = "manga/opentoonz-line-tools"
+    DESCRIPTION = "Find nearby line endpoints and close small gaps before region filling. Best used on panel crops, not full pages."
 
     def autoclose(
         self,
@@ -183,6 +185,7 @@ class OTRegionPaletteMap:
     RETURN_NAMES = ("region_preview", "regions_json")
     FUNCTION = "regions"
     CATEGORY = "manga/opentoonz-line-tools"
+    DESCRIPTION = "Detect fillable color regions enclosed by line art and return a colored preview plus region metadata JSON."
 
     def regions(self, image, threshold: int, min_area: int, max_regions: int, ignore_border_regions: bool):
         settings = RegionSettings(min_area=min_area, max_regions=max_regions, ignore_border_regions=ignore_border_regions)
@@ -210,7 +213,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "OTBlueLineCleanup": "OT Blue Line Cleanup",
-    "OTLineAutoClose": "OT Line AutoClose",
-    "OTRegionPaletteMap": "OT Region Palette Map",
+    "OTBlueLineCleanup": "Blue Sketch Cleaner",
+    "OTLineAutoClose": "Line Gap Closer",
+    "OTRegionPaletteMap": "Color Region Finder",
 }
