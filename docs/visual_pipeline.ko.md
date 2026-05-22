@@ -56,6 +56,15 @@ flowchart TD
 | C | clean line + autoclose | fill 안정성 증가 | 잘못된 closure line이 생길 수 있음 |
 | D | clean line + autoclose + region JSON | 후처리 수정 용이 | downstream region-aware tooling 필요 |
 
+현재 로컬 비교:
+
+- [패널 채색 결과 비교](experiments/colorization_comparison.ko.md)
+- 로컬 Apple Silicon에서는 `clean_line` / `closed_line`이 img2img 전에 blue rough
+  artifact를 줄이는 데 도움이 됩니다.
+- 현재 SD1.5 ControlNet workflow는 패널 보존보다 재해석 성향이 강합니다.
+- 설치된 fp8 Qwen Image Edit 모델은 MPS float8 미지원 때문에 CUDA 환경에서 다시
+  시도하는 것이 맞습니다.
+
 ## 채택 기준
 
 아래 중 하나 이상이 명확히 좋아질 때 default 전처리로 채택합니다.

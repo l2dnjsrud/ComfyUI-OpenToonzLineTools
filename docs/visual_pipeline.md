@@ -56,6 +56,16 @@ flowchart TD
 | C | clean line + autoclose | better fill stability | gap closure may create false lines |
 | D | clean line + autoclose + region JSON | easier post-correction | needs downstream region-aware tooling |
 
+Current local comparison:
+
+- [Panel Colorization Comparison](experiments/colorization_comparison.md)
+- On local Apple Silicon, `clean_line` / `closed_line` helps remove blue rough
+  artifacts before img2img.
+- The available SD1.5 ControlNet workflow is too generative for faithful panel
+  preservation.
+- The installed fp8 Qwen Image Edit model should be retried on CUDA because MPS
+  does not support the required float8 path.
+
 ## Adoption Gate
 
 Use these tools as a default only if they improve at least one measurable outcome:
